@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<layout version="0.0.0.1">
+    <!--PRODUCT_TYPE_restockable>
+        <label>Catalog Product View (Restockable)</label>
+        <reference name="product.info">        
+            <reference name="product.info.addtocart">
+                <action method="setTemplate">
+                    <path>restock/catalog/product/view/addtocart.phtml</path>
+                </action>
+            </reference>
+        </reference>
+    </PRODUCT_TYPE_restockable-->
+    <catalog_product_view>
+        <reference name="head">            
+            <action method="addItem"><type>skin_css</type><name>css/jqCron.css</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/jqCron.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>js/jqCron.en.js</name></action>
+        </reference>
+        <reference name="product.info.options">
+            <action method="addOptionRenderer">
+                <type>cron</type>
+                <block>restock/catalog_product_view_options_type_cron</block>
+                <template>restock/catalog/product/view/options/type/cron.phtml</template>
+            </action>
+        </reference>
+    </catalog_product_view>
+</layout>

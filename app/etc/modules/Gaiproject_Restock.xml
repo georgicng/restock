@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+  <modules>
+    <Gaiproject_Restock>
+      <active>true</active>
+      <codePool>local</codePool>
+      <depends/>
+    </Gaiproject_Restock>
+  </modules>
+</config>
