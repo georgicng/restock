@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <config>
   <modules>
     <Gaiproject_Restock>
-      <version>0.0.1.0</version>
+      <version>0.0.1.2</version>
     </Gaiproject_Restock>
   </modules>
   <global>
     <models>
       <restock>
         <class>Gaiproject_Restock_Model</class>
-        <resourceModel>restock_resource</resourceModel>
+        <resourceModel>restock_mysql4</resourceModel>
       </restock>
       <catalog>
         <rewrite>
             <product_option>Gaiproject_Restock_Model_Catalog_Product_Option</product_option>
         </rewrite>
       </catalog>
-    </models>
-    <restock_resource>
-        <class/>
-        <entities/>
-    </restock_resource>
-    <resources>
+      <restock_mysql4>
+        <class>Gaiproject_Restock_Model_Resource</class>
+        <entities>
+          <schedule>
+            <table>schedule_list</table>
+          </schedule>
+          <item>
+            <table>schedule_list_item</table>
+          </item>
+        </entities>
+      </restock_mysql4>
+      <resources>
         <restock_setup>
             <setup>
                 <module>Gaiproject_Restock</module>
                 <class>Mage_Catalog_Model_Resource_Setup</class>
             </setup>
         </restock_setup>
-    </resources>
+      </resources>
+    </models>
     <helpers>
       <restock>
         <class>Gaiproject_Restock_Helper</class>
@@ -51,6 +57,7 @@
           <restockable>
             <label>Restockable Product</label>
             <model>restock/catalog_product_type_restockable</model>
+            <is_qty>1</is_qty>
             <composite>0</composite>
           </restockable>
           <grouped>
@@ -99,7 +106,46 @@
                 </restock>
             </observers>
         </catalog_product_save_before>
+        <checkout_allow_guest>
+            <observers>
+                <restock>
+                    <type>singleton</type>
+                    <class>restock/observer</class>
+                    <method>isAllowGuest</method>
+                </restock>
+            </observers>
+        </checkout_allow_guest>
+        <sales_order_place_after>
+            <observers>
+                <restock>
+                    <type>singleton</type>
+                    <class>restock/observer</class>
+                    <method>sales_order_place_after</method>
+                </restock>
+            </observers>
+        </sales_order_place_after>
+        <checkout_type_onepage_save_order>
+          <observers>
+            <restock>
+              <type>singleton</type>
+              <class>restock/observer</class>
+              <method>saveCustomData</method>
+            </restock>
+          </observers>
+        </checkout_type_onepage_save_order>
     </events>
+    <fieldsets>
+            <sales_convert_quote>                    
+                <restock_order><to_order>*</to_order></restock_order>
+                <restock_reorder><to_order>*</to_order></restock_reorder>
+                <restock_listId><to_order>*</to_order></restock_listId>
+            </sales_convert_quote>
+            <sales_convert_order>                       
+              <restock_order><to_quote>*</to_quote></restock_order>
+              <restock_reorder><to_quote>*</to_quote></restock_reorder>
+              <restock_listId><to_quote>*</to_quote></restock_listId>
+            </sales_convert_order>
+        </fieldsets>
   </global>
   <frontend>
     <routers>
@@ -119,4 +165,16 @@
       </updates>
     </layout>
   </frontend>
+  <crontab>
+    <jobs>
+      <restock_schedule>
+        <schedule>
+          <cron_expr>* * * * *</cron_expr>
+        </schedule>
+        <run>
+          <model>restock/restock::runSchedule</model>
+        </run>
+      </restock_schedule>
+    </jobs>
+  </crontab>
 </config>
